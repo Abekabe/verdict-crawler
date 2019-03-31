@@ -4,7 +4,7 @@ Using python code to crawl verdicts form Judicial yuan of Taiwan.
 
 ## Getting Started
 
-You can obtain the verdict of 所得稅 in 台北地方行政法院 by entering start and end date now. The output file would be a csv file which column is id, number, date, reason, content of verdict.
+You can obtain the verdict of 所得稅 in 台北高等行政法院 by entering start and end date now. The output file would be a csv file which column is id, number, date, reason, content of verdict.
 In addition, each content of verdict would save as txt file at the project_folder/data which use number as file name.
 
 ### Prerequisites
