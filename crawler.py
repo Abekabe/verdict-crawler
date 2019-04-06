@@ -12,12 +12,12 @@ start = input("start(yyyymmdd): ")
 end = input("end(yyyymmdd): ")
 
 domain = 'http://jirs.judicial.gov.tw/FJUD/'
-payload = {'v_court':'TPB 臺北高等行政法院', 
-           'v_sys':'A', 
-           'sel_judword':'常用字別', 
+payload = {'v_court':'TPB 臺北高等行政法院',
+           'v_sys':'A',
+           'sel_judword':'常用字別',
            'jt':'所得稅',
-           'Button':'查詢', 
-           'jud_title':'所得稅', 
+           'Button':'查詢',
+           'jud_title':'所得稅',
            'courtFullName':'TPBA',
            'sdate': start,
            'edate': end
@@ -45,7 +45,7 @@ print('total: ' + str(total_num))
 
 for verdict in verdicts:
     link = verdict.get('href')
-    if not link.find('FJUDQRY03_1.aspx') :
+    if link.find('FJUDQRY03_1.aspx') != -1:
         padding = link.split('id=1')
         break
 
@@ -53,11 +53,12 @@ soup = BeautifulSoup(r.text, 'html.parser')
 verdicts = soup.find_all('a')
 h = {'Referer': domain + search}
 data = []
-with open('output.csv', 'w', encoding = 'utf-8') as csvfile:
+with open('catalog_' + start + '_' + end + '.csv', 'w', encoding = 'big5', newline='\n') as csvfile:
     writer = csv.writer(csvfile)
     #writer.writerow(['id', 'number', 'date', 'reason', 'content'])
     writer.writerow(['id', 'number', 'date', 'reason'])
     verdict_list = list(range(int(total_num)))
+    num = 1
     while verdict_list != []:
         verdict_id = int(verdict_list[0]) + 1
         try:
@@ -65,28 +66,33 @@ with open('output.csv', 'w', encoding = 'utf-8') as csvfile:
             r = s.post(domain + link, data = payload, cookies = r.cookies, headers = h)
             soup = BeautifulSoup(r.text, 'html.parser')
             verdict_content = soup.find('td', id='jfull').text
-            detail = soup.find_all('span')  
-            title = detail[3].text[8:]
+            detail = soup.find_all('span')
             verdict_num = detail[3].text[8:]
             verdict_date = detail[4].text[8:]
             verdict_reason = detail[5].text[8:]
             #data.append([verdict_id, verdict_num, verdict_date, verdict_reason, verdict_content])
-            data.append([verdict_id, verdict_num, verdict_date, verdict_reason])
-            print(data[-1][0])
-            path = "data/"
-            if not os.path.isdir(path):
-                os.mkdir(path)
-            f = open('data/' + title + '.txt','wb+')
-            f.write(verdict_content.encode("utf8"))
-            verdict_list.pop(0)
-            
+            title = verdict_content.split('\n')[0]
+            if title.find('判決') != -1:
+                data.append([num, verdict_num, verdict_date, verdict_reason])
+                print(data[-1][0])
+                path = 'data_' + start + '_' + end + '/'
+                if not os.path.isdir(path):
+                    os.mkdir(path)
+                f = open(path + str(num) + '.txt','wb+')
+                f.write(verdict_content.encode("utf-8"))
+                verdict_list.pop(0)
+                num += 1
+            else:
+                verdict_list.pop(0)
+
         except AttributeError:
-            print('AttributeError in ' + str(verdict_id))          
+            print('AttributeError in ' + str(verdict_id))
         except ConnectionError:
             print('Connection aborted in ' + str(verdict_id))
-            
+
         time.sleep(3)
 
     sorted(data, key = lambda x : x[0])
-    for item in data:
-        writer.writerow(item)
+    writer.writerows(data)
+    input()
+csvfile.close()
