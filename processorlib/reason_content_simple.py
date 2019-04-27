@@ -5,14 +5,15 @@ import csv
 
 def get_reason_content_simple(verdict, date, file_num):
 
-    start_index = verdict.index('事實概要')
-    end_index = verdict.index('。', verdict.index('原告主張', start_index) - 10) + 1
-    content = verdict[start_index + 5 : end_index].replace('\n', '')
+    try:
+        start_index = verdict.index('事實概要')
+        end_index = verdict.index('。', verdict.index('原告主張', start_index) - 10) + 1
+        content = verdict[start_index + 5 : end_index].replace('\n', '')
+        content_num = len(content)
 
-    #print(file_num)
-    #print(len(content))
-
-    content_num = len(content)
+    except:
+        content = '*'
+        content_num = '*'
     '''
     # save csv file
     filepath = 'analysis_' + date + '/reason_content_num_' + date + '.csv'

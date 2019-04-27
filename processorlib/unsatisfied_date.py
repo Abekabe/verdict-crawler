@@ -5,9 +5,12 @@ import csv
 
 def get_unsatisfied_date(verdict, date, file_num):
 
-    start_index = verdict.index('中華民國') + 4
-    unsatisfied_date = verdict[start_index : verdict.index('日', start_index) + 1].replace('\n', '')
+    try:
+        start_index = verdict.index('中華民國') + 4
+        unsatisfied_date = verdict[start_index : verdict.index('日', start_index) + 1].replace('\n', '')
 
+    except:
+        unsatisfied_date = ''
     #print(unsatisfied_date)
 
     # save csv file

@@ -4,16 +4,26 @@ import os
 import csv
 
 def get_plain_content(verdict, date, file_num):
-
-    start_index = verdict.index('\n二、')
-    end_index = verdict.index('\n三、', start_index)
-    content = verdict[start_index + 5 : end_index].replace('\n', '')
     '''
-    print(file_num)
-    print(content)
+    try:
+        start_index = verdict.index('\n二、')
+        end_index = verdict.index('\n三、', start_index)
+        content = verdict[start_index + 5 : end_index].replace('\n', '')
+        content_num = len(content)
+    except:
+        content = '*'
+        content_num = '*'
     '''
-    content_num = len(content)
+    content = ''
+    content_line = verdict.replace('\n二、', '@').replace('\n三、', '@').replace('\n四、', '@').replace('\n五、', '@').split('@')
+    for line in content_line:
+        if line[:5].find('原告') != -1:
+            content = line
+            content_num = len(content)
 
+    if content == '':
+        content = '*'
+        content_num = -1
 
     # save csv file
     filepath = 'analysis_' + date + '/plain_content_num_' + date + '.csv'
@@ -26,4 +36,4 @@ def get_plain_content(verdict, date, file_num):
                 writer = csv.writer(csvfile)
                 writer.writerow([file_num,content_num])
 
-    return content, content_num
+    return content[0], content_num

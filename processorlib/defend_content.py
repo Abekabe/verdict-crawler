@@ -5,15 +5,14 @@ import csv
 
 def get_defend_content(verdict, date, file_num):
 
-    start_index = verdict.index('\n三、')
-    end_index = verdict.index('\n四、', start_index)
-    content = verdict[start_index + 3 : end_index].replace('\n', '')
-
-    '''
-    print(file_num)
-    print(content)
-    '''
-    content_num = len(content)
+    try:
+        start_index = verdict.index('\n三、')
+        end_index = verdict.index('\n四、', start_index)
+        content = verdict[start_index + 3 : end_index].replace('\n', '')
+        content_num = len(content)
+    except:
+        content = '*'
+        content_num = '*'
 
 
     # save csv file

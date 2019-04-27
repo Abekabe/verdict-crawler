@@ -3,18 +3,19 @@
 import os
 import csv
 
-def get_plain_content_litigation(verdict, date, file_num):
+def get_defend_content_litigation(verdict, date, file_num):
 
     try:
         content = ''
         if verdict.find('\n壹、') != -1 and verdict.find('壹、程序部分') == -1:
-            content_line = verdict.replace('\n貳、', '@').replace('\n參、', '@').replace('\n肆、', '@').split('@')
+            content_line = verdict.replace('\n貳、', '@').replace('\n參、', '@').replace('\n肆、', '@').replace('\n伍、', '@').split('@')
         else:
-            content_line = verdict.replace('\n二、', '@').replace('\n三、', '@').replace('\n四、', '@').split('@')
+            content_line = verdict.replace('\n二、', '@').replace('\n三、', '@').replace('\n四、', '@').replace('\n五、', '@').split('@')
         for line in content_line:
-            if line.find('上訴') == 0 and len(line) > 100:
+            if line.find('被上訴') == 0 and len(line) > 100:
                 content = line
                 content_num = len(content)
+                print(content)
 
         if content == '':
             content = '*'
@@ -23,12 +24,13 @@ def get_plain_content_litigation(verdict, date, file_num):
     except:
         content_num = '*'
 
+
     # save csv file
-    filepath = 'analysis_' + date + '/plain_content_num_' + date + '.csv'
+    filepath = 'analysis_' + date + '/defend_content_num_' + date + '.csv'
     if not os.path.isfile(filepath):
         with open(filepath, 'a', encoding = 'big5', newline='\n') as csvfile:
             writer = csv.writer(csvfile)
-            writer.writerow(['案件編號', '原告字數'])
+            writer.writerow(['案件編號', '被告字數'])
 
     with open(filepath, 'a', encoding = 'big5', newline='\n') as csvfile:
                 writer = csv.writer(csvfile)

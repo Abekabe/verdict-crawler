@@ -5,12 +5,12 @@ import csv
 
 def get_debate_end_simple(verdict, date, file_num):
 
-    set_line = verdict[:verdict.index('上列當事人')]
-
-    #print(set_line)
-    end_index = set_line.index('辯論終結')
-    end_date = set_line[set_line.index('號', end_index - 20) + 2 : end_index]
-    #print(end_date)
+    try:
+        set_line = verdict[:verdict.index('上列當事人')]
+        end_index = set_line.index('辯論終結')
+        end_date = set_line[set_line.index('號', end_index - 20) + 2 : end_index]
+    except:
+        end_date = '*'
 
     # save csv file
     filepath = 'analysis_' + date + '/debate_end_' + date + '.csv'

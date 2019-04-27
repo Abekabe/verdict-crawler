@@ -5,13 +5,15 @@ import csv
 
 def get_reason_content_again(verdict, date, file_num):
 
-    start_index = verdict.index('一、')
-    end_index = verdict.index('二、', start_index)
-    content = verdict[start_index + 2 : end_index].replace('\n', '').replace('事實概要：', '').replace('事實概要', '')
+    try:
+        start_index = verdict.index('一、')
+        end_index = verdict.index('二、', start_index)
+        content = verdict[start_index + 2 : end_index].replace('\n', '').replace('事實概要：', '').replace('事實概要', '')
+        content_num = len(content)
 
-    #print(file_num)
-    #print(content)
-    content_num = len(content)
+    except:
+        content = '*'
+        content_num = '*'
 
 
     '''

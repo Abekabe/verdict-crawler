@@ -4,11 +4,15 @@ import os
 import csv
 
 def get_unsatisfied_reason(verdict, date, file_num):
-    verdict = verdict.replace('\n', '')
-    start_index = verdict.index('中華民國') + 4
-    start_index = verdict.index('日', start_index)
-    reason = verdict[start_index + 1 : verdict.index('，', start_index)]
-    #print(verdict[start_index - 50 : start_index + 51])
+
+    try:
+        verdict = verdict.replace('\n', '')
+        start_index = verdict.index('中華民國') + 4
+        start_index = verdict.index('日', start_index)
+        reason = verdict[start_index + 1 : verdict.index('，', start_index)]
+
+    except:
+        reason = ''
     #print(reason)
 
     # save csv file

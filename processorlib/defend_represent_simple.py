@@ -5,16 +5,18 @@ import csv
 
 def get_defend_represent_simple(verdict, date, file_num):
 
-    line = verdict[verdict.index('被告') + 2 : verdict.index('上列當事人')].replace('\n', '')
+    try:
+        line = verdict[verdict.index('被告') + 2 : verdict.index('上列當事人')].replace('\n', '')
 
-    if line.find('代表人') != -1:
-        if line.find('訴訟代理人') != -1:
-            defend_represent = line.split('訴訟代理人')[0][line.index('代表人') + 3:]
+        if line.find('代表人') != -1:
+            if line.find('訴訟代理人') != -1:
+                defend_represent = line.split('訴訟代理人')[0][line.index('代表人') + 3:]
+            else:
+                defend_represent = line[line.index('代表人') + 3:]
         else:
-            defend_represent = line[line.index('代表人') + 3:]
-    else:
-        defend_represent = ''
-
+            defend_represent = ''
+    except:
+        defend_represent = '*'
     #print(defend_represent)
 
     # save csv file

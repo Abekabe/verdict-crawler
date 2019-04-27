@@ -5,9 +5,13 @@ import csv
 
 def get_verdict_date(verdict, date, file_num):
 
-    verdict = verdict.replace('\n', '')
-    end_index = verdict.index('中華民國', len(verdict) - 1000)
-    verdict_date = verdict[end_index + 4: verdict.index('日', end_index) + 1]
+    try:
+        verdict = verdict.replace('\n', '')
+        end_index = verdict.index('中華民國', len(verdict) - 1000)
+        verdict_date = verdict[end_index + 4: verdict.index('日', end_index) + 1]
+
+    except:
+        verdict_date = ''
     #print(verdict_date)
 
     # save csv file

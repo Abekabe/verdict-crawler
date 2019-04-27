@@ -3,29 +3,25 @@
 import os
 import csv
 
-def get_verdict_result(verdict, date, file_num):
+def get_special_result(verdict, date, file_num):
 
     try:
         result_line = verdict[verdict.index('主文'): verdict.index('。', verdict.index('主文'))].replace('\n', '')
-        if result_line.find('駁回') != -1:
-            result = '駁回'
-        elif result_line.find('撤銷') != -1:
-            result = '撤銷'
-        elif result_line.find('廢棄') != -1:
-            result = '廢棄'
+        if result_line.find('元') != -1:
+            result = '是'
         else:
-            result = '????'
+            result = '否'
 
     except:
         result = '*'
     #print(result)
 
     # save csv file
-    filepath = 'analysis_' + date + '/verdict_result_' + date + '.csv'
+    filepath = 'analysis_' + date + '/special_result_' + date + '.csv'
     if not os.path.isfile(filepath):
         with open(filepath, 'a', encoding = 'big5', newline='\n') as csvfile:
             writer = csv.writer(csvfile)
-            writer.writerow(['案件編號', '判決結果'])
+            writer.writerow(['案件編號', '自為判決'])
 
     with open(filepath, 'a', encoding = 'big5', newline='\n') as csvfile:
                 writer = csv.writer(csvfile)

@@ -5,11 +5,15 @@ import csv
 
 def get_court_num(verdict, date, file_num):
 
-    end_index = verdict.index('中華民國', len(verdict) - 1200)
-    result_line = verdict[end_index: end_index + 50].split('\n')
-    for line in result_line:
-        if line.find('臺北高等行政法院') != -1:
-            court_num = line[-2]
+    court_num = '*'
+    try:
+        end_index = verdict.index('中華民國', len(verdict) - 1200)
+        result_line = verdict[end_index: end_index + 50].split('\n')
+        for line in result_line:
+            if line.find('臺北高等行政法院') != -1:
+                court_num = line[-2]
+    except:
+        court_num = '*'
 
     #print(court_num)
 

@@ -5,25 +5,28 @@ import csv
 
 def get_defend_attorney_simple(verdict, date, file_num):
 
-    line = verdict[verdict.index('被告') + 2 : verdict.index('上列當事人')].replace('\n\n', '、').replace('\n', '、')
+    try:
+        line = verdict[verdict.index('被告') + 2 : verdict.index('上列當事人')].replace('\n\n', '、').replace('\n', '、')
 
-    if line.find('訴訟代理人') != -1:
-        defend_attorney = line[line.index('訴訟代理人') + 5:]
-    else:
-        defend_attorney = ''
+        if line.find('訴訟代理人') != -1:
+            defend_attorney = line[line.index('訴訟代理人') + 5:]
+        else:
+            defend_attorney = ''
 
-    if defend_attorney.find('會計師') != -1:
-        defend_attorney = defend_attorney.replace('會計師', '會計師、')
-    if defend_attorney.find('律師') != -1:
-        defend_attorney = defend_attorney.replace('律師', '律師、')
-    if defend_attorney.find('訴訟代理人') != -1:
-        defend_attorney = defend_attorney.replace('訴訟代理人', '')
+        if defend_attorney.find('會計師') != -1:
+            defend_attorney = defend_attorney.replace('會計師', '會計師、')
+        if defend_attorney.find('律師') != -1:
+            defend_attorney = defend_attorney.replace('律師', '律師、')
+        if defend_attorney.find('訴訟代理人') != -1:
+            defend_attorney = defend_attorney.replace('訴訟代理人', '')
 
-    defend_attorney = defend_attorney[:-1]
+        defend_attorney = defend_attorney[:-1]
 
-    defend_attorney_list = defend_attorney.split('、')
-    defend_attorney_list.insert(0, file_num)
-
+        defend_attorney_list = defend_attorney.split('、')
+        defend_attorney_list.insert(0, file_num)
+    except:
+        defend_attorney = "*"
+        defend_attorney_list = []
 
     #print(defend_attorney)
 

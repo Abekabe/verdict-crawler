@@ -5,10 +5,13 @@ import csv
 
 def search_keyword(content, keyword, date, file_num, filename):
 
-    if content.find(keyword) != -1:
-        find = '有'
-    else:
-        find = '無'
+    try:
+        if content.find(keyword) != -1:
+            find = '有'
+        else:
+            find = '無'
+    except:
+        find = '*'
 
 
     # save csv file

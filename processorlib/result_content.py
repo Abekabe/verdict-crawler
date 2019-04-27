@@ -16,8 +16,8 @@ def get_result_content(verdict, date, file_num):
         content_num = len(content)
 
     except:
-        content = ''
-        content_num = -1
+        content = '*'
+        content_num = '*'
 
     # save csv file
     filepath = 'analysis_' + date + '/result_content_num_' + date + '.csv'

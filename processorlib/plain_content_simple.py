@@ -5,16 +5,24 @@ import csv
 
 def get_plain_content_simple(verdict, date, file_num):
 
-    start_index = verdict.index('主張')
-    #end_index = verdict.index('。', verdict.index('被告', start_index) - 20) + 1
-    end_index = verdict.index('三、', start_index)
-    content = verdict[start_index + 3 : end_index].replace('\n', '')
+    try:
+        content = ''
+        if verdict.find('\n壹、') != -1 and verdict.find('壹、程序部分') == -1:
+            content_line = verdict.replace('\n貳、', '@').replace('\n參、', '@').replace('\n肆、', '@').split('@')
+        else:
+            content_line = verdict.replace('\n二、', '@').replace('\n三、', '@').replace('\n四、', '@').split('@')
+        for line in content_line:
+            if line[:5].find('原告') != -1 and len(line) > 100:
+                content = line
+                content_num = len(content)
 
-    #print(file_num)
-    #print(content)
+        if content == '':
+            content = '*'
+            content_num = -1
 
-    content_num = len(content)
-    '''
+    except:
+        content_num = '*'
+
     # save csv file
     filepath = 'analysis_' + date + '/plain_content_num_' + date + '.csv'
     if not os.path.isfile(filepath):
@@ -25,5 +33,5 @@ def get_plain_content_simple(verdict, date, file_num):
     with open(filepath, 'a', encoding = 'big5', newline='\n') as csvfile:
                 writer = csv.writer(csvfile)
                 writer.writerow([file_num,content_num])
-    '''
-    return content_num
+
+    return content, content_num
