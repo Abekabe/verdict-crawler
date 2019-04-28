@@ -69,39 +69,16 @@ def save_content(num, padding, verdict_list, r, search):
     return data, num
 
 if __name__ == '__main__':
-    '''
     start = input("start(yyymmdd): ")
     end = input("end(yyymmdd): ")
-    '''
-    year = input("year: ")
-    start = year + '0101'
-    end = year + '1231'
     domain = 'https://law.judicial.gov.tw/FJUD/'
     views = get_views(domain + 'default.aspx/')
-    payload = {'jud_court': 'TPB',
-                'jud_sys': 'A',
-               'sel_judword':'常用字別',
-               'judtype': 'JUDBOOK',
-                'whosub': '1',
-                'ctl00$cp_content$btnQry': '送出查詢',
-                'dy1': start[:-4],
-                'dm1': start[-4:-2],
-                'dd1': start[-2:],
-                'dy2': end[:-4],
-                'dm2': end[-4:-2],
-                'dd2': end[-2:],
-                'jud_title': '所得稅',
-                '__VIEWSTATE': views[0],
-                '__VIEWSTATEGENERATOR': views[1],
-                '__EVENTVALIDATION': views[2]
-              }
-
-    padding, h, total_num, r, search = get_url(domain, payload)
+    court_list = ['TPB', 'TCB', 'KSB']
+    court_name = {'臺北': 'TPB', '臺中': 'TCB', '高雄': 'KSB'}
     filepath = 'catalog_' + start + '_' + end + '.csv'
-
     exist_num = []
     exist_id = []
-    data = []
+    exist_court = []
 
     if os.path.isfile(filepath):
         with open(filepath, 'r', encoding = 'big5', newline='\n') as csvfile:
@@ -110,10 +87,12 @@ if __name__ == '__main__':
             for row in reader:
                 exist_num.append(int(row[0]))
                 exist_id.append(int(row[1]))
+                exist_court.append(row[2])
             #data.append(list(row for row in reader))
         print(exist_id)
         current_num = exist_num[-1] + 1
         current_id = exist_id[-1]
+        court_num = court_list.index(court_name[exist_court[-1][:2]])
         csvfile.close()
     else:
         with open(filepath, 'a', encoding = 'big5', newline='\n') as csvfile:
@@ -121,22 +100,41 @@ if __name__ == '__main__':
             writer.writerow(['num', 'id', 'number', 'date', 'reason'])
         current_num = 1
         current_id = 0
-    while [] in data:
-            data.remove([])
+        court_num = 0
 
-    with open(filepath, 'a', encoding = 'big5', newline='\n') as csvfile:
-        writer = csv.writer(csvfile)
-        verdict_list = list(range(int(current_id), int(total_num)))
-        print(verdict_list)
+    for num in range(court_num, len(court_list)):
+        payload = {'jud_court': court_list[num],
+                    'jud_sys': 'A',
+                   'sel_judword':'常用字別',
+                   'judtype': 'JUDBOOK',
+                    'whosub': '1',
+                    'ctl00$cp_content$btnQry': '送出查詢',
+                    'dy1': start[:-4],
+                    'dm1': start[-4:-2],
+                    'dd1': start[-2:],
+                    'dy2': end[:-4],
+                    'dm2': end[-4:-2],
+                    'dd2': end[-2:],
+                    'jud_title': '所得稅',
+                    '__VIEWSTATE': views[0],
+                    '__VIEWSTATEGENERATOR': views[1],
+                    '__EVENTVALIDATION': views[2]
+                  }
 
-        while verdict_list != []:
-            d, current_num = save_content(current_num, padding, verdict_list, r, search)
-            if d != []:
-                writer.writerow(d)
-            time.sleep(1)
-        #sorted(data, key = lambda x : x[0])
+        padding, h, total_num, r, search = get_url(domain, payload)
 
+        with open(filepath, 'a', encoding = 'big5', newline='\n') as csvfile:
+            writer = csv.writer(csvfile)
+            verdict_list = list(range(int(current_id), int(total_num)))
+            print(verdict_list)
 
-    csvfile.close()
-    print(str(current_num) + '/' + str(total_num))
+            while verdict_list != []:
+                d, current_num = save_content(current_num, padding, verdict_list, r, search)
+                if d != []:
+                    writer.writerow(d)
+                time.sleep(1)
+
+        csvfile.close()
+        print(str(current_num) + '/' + str(total_num))
+        current_id = 0
     input('Success!! Please press any key to continue...')
