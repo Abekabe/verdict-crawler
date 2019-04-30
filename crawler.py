@@ -29,8 +29,13 @@ def get_url(domain, payload):
     r = s.post(domain + search, cookies = r.cookies, verify=False, headers = h)
     soup = BeautifulSoup(r.text, 'html.parser')
     padding = soup.find_all(attrs={"id" : "hlTitle", "class" : "hlTitle_scroll"})[1].get('href').split('ro=1')
-    total_line = soup.find('span').text
-    total_num = int(total_line[total_line.index('共') + 2 : total_line.index('筆') - 1]) - 1
+
+    q = padding[1].split('&')[1]
+    payload = {'ty': 'JUDBOOK', 'q': q[2:]}
+    total_url = 'https://law.judicial.gov.tw/controls/GetResultCount.ashx/?ty=JUDBOOK&q=' + q[2:]
+    r = s.get(total_url, data = payload, cookies = r.cookies, verify=False, headers = h)
+    total_num = int(r.json()['Total']) - 1
+    #total_num = int(total_line[total_line.index('共') + 2 : total_line.index('筆') - 1]) - 1
 
     return padding, h, total_num, r, search
 
@@ -126,7 +131,7 @@ if __name__ == '__main__':
         with open(filepath, 'a', encoding = 'big5', newline='\n') as csvfile:
             writer = csv.writer(csvfile)
             verdict_list = list(range(int(current_id), int(total_num)))
-            print(verdict_list)
+            #print(verdict_list)
 
             while verdict_list != []:
                 d, current_num = save_content(current_num, padding, verdict_list, r, search)
