@@ -22,7 +22,7 @@ def get_defend_represent_litigation(verdict, date, file_num):
     #print(defend_represent)
 
     # save csv file
-    filepath = 'analysis_' + date + '/defend_represent_litigation_' + date + '.csv'
+    filepath = 'analysis_' + date + '/defend_represent_' + date + '.csv'
     if not os.path.isfile(filepath):
         with open(filepath, 'a', encoding = 'big5', newline='\n') as csvfile:
             writer = csv.writer(csvfile)
@@ -30,6 +30,6 @@ def get_defend_represent_litigation(verdict, date, file_num):
 
     with open(filepath, 'a', encoding = 'big5', newline='\n') as csvfile:
                 writer = csv.writer(csvfile)
-                writer.writerow([file_num,defend_represent])
+                writer.writerow([file_num, defend_represent])
 
     return defend_represent

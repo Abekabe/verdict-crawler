@@ -15,7 +15,7 @@ def get_defend_content_litigation(verdict, date, file_num):
             if line.find('被上訴') == 0 and len(line) > 100:
                 content = line
                 content_num = len(content)
-                print(content)
+
 
         if content == '':
             content = '*'

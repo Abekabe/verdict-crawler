@@ -2,17 +2,17 @@
 # coding: utf-8
 import os
 import csv
+import re
 
 def search_keyword(content, keyword, date, file_num, filename):
 
     try:
-        if content.find(keyword) != -1:
-            find = '有'
-        else:
-            find = '無'
+        find_list = re.findall(keyword, content)
+        find = '、'.join(find_list)
     except:
         find = '*'
 
+    find_list.insert(0, file_num)
 
     # save csv file
     filepath = 'analysis_' + date + '/search_' + filename  + '_' + date + '.csv'
@@ -23,6 +23,6 @@ def search_keyword(content, keyword, date, file_num, filename):
 
     with open(filepath, 'a', encoding = 'big5', newline='\n') as csvfile:
                 writer = csv.writer(csvfile)
-                writer.writerow([file_num,find])
+                writer.writerow(find_list)
 
     return find

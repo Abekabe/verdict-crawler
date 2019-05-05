@@ -12,6 +12,13 @@ def get_money_inquiry(content, date, file_num):
             money = content[start_index + 4 : content.index('元', start_index) + 1]
             if len(money) > 20:
                 money = '*'
+
+        elif content.find('應補稅額') != -1:
+            start_index = content.index('應補稅額')
+            money = content[start_index + 4 : content.index('元', start_index) + 1]
+            if len(money) > 20:
+                money = '*'
+
         else:
             money = '*'
     except:

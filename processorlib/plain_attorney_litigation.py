@@ -27,7 +27,7 @@ def get_plain_attorney_litigation(verdict, date, file_num):
     #print(plain_attorney)
 
     # save csv file
-    filepath = 'analysis_' + date + '/plain_attorney_litigation_' + date + '.csv'
+    filepath = 'analysis_' + date + '/plain_attorney_' + date + '.csv'
     if not os.path.isfile(filepath):
         with open(filepath, 'a', encoding = 'big5', newline='\n') as csvfile:
             writer = csv.writer(csvfile)
@@ -35,6 +35,6 @@ def get_plain_attorney_litigation(verdict, date, file_num):
 
     with open(filepath, 'a', encoding = 'big5', newline='\n') as csvfile:
                 writer = csv.writer(csvfile)
-                writer.writerow([file_num,plain_attorney_list])
+                writer.writerow(plain_attorney_list)
 
     return plain_attorney

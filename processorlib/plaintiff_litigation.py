@@ -20,7 +20,7 @@ def get_plaintiff_litigation(verdict, date, file_num):
 
 
     # save csv file
-    filepath = 'analysis_' + date + '/plaintiff_litigation_' + date + '.csv'
+    filepath = 'analysis_' + date + '/plaintiff_' + date + '.csv'
     if not os.path.isfile(filepath):
         with open(filepath, 'a', encoding = 'big5', newline='\n') as csvfile:
             writer = csv.writer(csvfile)

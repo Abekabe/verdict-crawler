@@ -2,20 +2,25 @@
 # coding: utf-8
 import os
 import csv
+import re
 
 def get_judge(verdict, date, file_num):
 
     try:
-        judge = ''
-        end_index = verdict.index('中華民國', len(verdict) - 1200)
+        judge_list = []
+        index = [m.start() for m in re.finditer('書記官', verdict)]
+        verdict = verdict[:index[-1]]
+        end_index = verdict.index('中華民國', len(verdict) - 1000)
         result_line = verdict[end_index: end_index + 50].split('\n')
         for line in result_line:
             if line.find('法官') != -1:
-                judge += line[line.index('法官') + 2:] + '、'
-        judge = judge[:-1]
+                judge_list.append(line[line.index('法官') + 2:])
+
     except:
-        judge = '*'
-    #print(judge)
+        judge_list = ['*']
+
+    judge_list.insert(0, file_num)
+    judge = '、'.join(judge_list[1:])
 
     # save csv file
     filepath = 'analysis_' + date + '/judge_' + date + '.csv'
@@ -26,6 +31,6 @@ def get_judge(verdict, date, file_num):
 
     with open(filepath, 'a', encoding = 'big5', newline='\n') as csvfile:
                 writer = csv.writer(csvfile)
-                writer.writerow([file_num,judge])
+                writer.writerow(judge_list)
 
     return judge

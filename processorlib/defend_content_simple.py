@@ -15,7 +15,6 @@ def get_defend_content_simple(verdict, date, file_num):
             if line[:5].find('被告') != -1 and len(line) > 100:
                 content = line
                 content_num = len(content)
-                print(content)
 
         if content == '':
             content = '*'

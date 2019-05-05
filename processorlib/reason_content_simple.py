@@ -14,7 +14,7 @@ def get_reason_content_simple(verdict, date, file_num):
     except:
         content = '*'
         content_num = '*'
-    '''
+
     # save csv file
     filepath = 'analysis_' + date + '/reason_content_num_' + date + '.csv'
     if not os.path.isfile(filepath):
@@ -25,5 +25,5 @@ def get_reason_content_simple(verdict, date, file_num):
     with open(filepath, 'a', encoding = 'big5', newline='\n') as csvfile:
                 writer = csv.writer(csvfile)
                 writer.writerow([file_num,content_num])
-    '''
+
     return content, content_num
