@@ -58,7 +58,8 @@ if __name__ == '__main__':
 
         for f_num in range(int(total)):
             file = open('data_' + date + '/' + str(f_num + 1) + '.txt', 'r', encoding = 'utf8')
-            verdict = file.read().replace('　', '').replace(' ', '').replace('\ue4fd', ' ').replace('\ue3f1', '').replace('\u6052', '?').replace('\ue481', '?').replace('\ue4da', '?').replace('\u5afa', '?').replace('再審', '')
+            verdict = file.read().replace('　', '').replace(' ', '').replace('再審', '')
+            #.replace('\ue4fd', ' ').replace('\ue3f1', '').replace('\u6052', '?').replace('\ue481', '?').replace('\ue4da', '?').replace('\u5afa', '?')
             end_date = ['', '', '']
             type_line = verdict[:100].replace('再審', '')
 
@@ -100,13 +101,13 @@ if __name__ == '__main__':
 
             result_content, result_content_num = get_result_content(verdict, date, f_num + 1)
             total_content_num = get_total_content(verdict, date, f_num + 1)
-            plain_search_1 = search_keyword(plain_content, '納.*保.*法第.*條第.*項、?', date, f_num + 1, 'plain_content_納稅者權利保護法')
-            defend_search_1 = search_keyword(defend_content, '納.*保.*法第.*條第.*項、?', date, f_num + 1, 'defend_content_納稅者權利保護法')
-            result_search_1 = search_keyword(result_content, '納.*保.*法第.*條第.*項、?', date, f_num + 1, 'result_content_納稅者權利保護法')
+            plain_search_1 = search_keyword(plain_content, '納.*保.*法第.*條第.*項、?', date, f_num + 1, 'plain_content_納稅者權利保護法', 1)
+            defend_search_1 = search_keyword(defend_content, '納.*保.*法第.*條第.*項、?', date, f_num + 1, 'defend_content_納稅者權利保護法', 1)
+            result_search_1 = search_keyword(result_content, '納.*保.*法第.*條第.*項、?', date, f_num + 1, 'result_content_納稅者權利保護法', 1)
 
-            plain_search_2 = search_keyword(plain_content, '稅捐稽徵法第(?:[11十一]{2}條?之[3-7三四五六七]{1}條?|[12十二]{2}條?之[1一]{1}條?)', date, f_num + 1, 'plain_content_稅捐稽徵法')
-            defend_search_2 = search_keyword(defend_content, '稅捐稽徵法第(?:[11十一]{2}條?之[3-7三四五六七]{1}條?|[12十二]{2}條?之[1一]{1}條?)', date, f_num + 1, 'defend_content_稅捐稽徵法')
-            result_search_2 = search_keyword(result_content, '稅捐稽徵法第(?:[11十一]{2}條?之[3-7三四五六七]{1}條?|[12十二]{2}條?之[1一]{1}條?)', date, f_num + 1, 'result_content_稅捐稽徵法')
+            plain_search_2 = search_keyword(plain_content, '稅捐稽徵法第(?:[11十一]{2}條?之[3-7三四五六七]{1}條?|[12十二]{2}條?之[1一]{1}條?)', date, f_num + 1, 'plain_content_稅捐稽徵法', 2)
+            defend_search_2 = search_keyword(defend_content, '稅捐稽徵法第(?:[11十一]{2}條?之[3-7三四五六七]{1}條?|[12十二]{2}條?之[1一]{1}條?)', date, f_num + 1, 'defend_content_稅捐稽徵法', 2)
+            result_search_2 = search_keyword(result_content, '稅捐稽徵法第(?:[11十一]{2}條?之[3-7三四五六七]{1}條?|[12十二]{2}條?之[1一]{1}條?)', date, f_num + 1, 'result_content_稅捐稽徵法', 2)
 
             reason_search = search_keyword_num(reason_content, '罰鍰', date, f_num + 1, 'reason_content_罰鍰')
 
