@@ -21,9 +21,9 @@ def get_views(url):
 
 def get_url(domain, payload):
 
-    h = {'Referer': domain + 'default.aspx'}
+    h = {'Referer': domain + '/Default_AD.aspx'}
     s = requests.Session()
-    r = s.post(domain + 'default.aspx/', data = payload, verify=False, headers = h)
+    r = s.post(domain + 'Default_AD.aspx', data = payload, verify=False, headers = h)
     soup = BeautifulSoup(r.text, 'html.parser')
     search = soup.find('iframe').get('src')
     r = s.post(domain + search, cookies = r.cookies, verify=False, headers = h)
@@ -77,7 +77,7 @@ if __name__ == '__main__':
     start = input("start(yyymmdd): ")
     end = input("end(yyymmdd): ")
     domain = 'https://law.judicial.gov.tw/FJUD/'
-    views = get_views(domain + 'default.aspx/')
+    views = get_views(domain + 'Default_AD.aspx/')
     court_list = ['TPB', 'TCB', 'KSB']
     court_name = {'臺北': 'TPB', '臺中': 'TCB', '高雄': 'KSB'}
     filepath = 'catalog_' + start + '_' + end + '.csv'
@@ -95,9 +95,14 @@ if __name__ == '__main__':
                 exist_court.append(row[2])
             #data.append(list(row for row in reader))
         print(exist_id)
-        current_num = exist_num[-1] + 1
-        current_id = exist_id[-1]
-        court_num = court_list.index(court_name[exist_court[-1][:2]])
+        if (len(exist_num) > 0):
+            current_num = exist_num[-1] + 1
+            current_id = exist_id[-1]
+            court_num = court_list.index(court_name[exist_court[-1][:2]])
+        else:
+            current_num = 1
+            current_id = 0
+            court_num = 0
         csvfile.close()
     else:
         with open(filepath, 'a', encoding = 'big5', newline='\n') as csvfile:
