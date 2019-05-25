@@ -6,24 +6,15 @@ import csv
 def get_money_inquiry(content, date, file_num):
 
     try:
+        money = '*'
         content = content.replace('\n', '')
-        if content.find('補徵稅額') != -1:
-            start_index = content.index('補徵稅額')
-            money = content[start_index + 4 : content.index('元', start_index) + 1]
-            if len(money) > 20:
-                money = '*'
-
-        elif content.find('應補稅額') != -1:
-            start_index = content.index('應補稅額')
-            money = content[start_index + 4 : content.index('元', start_index) + 1]
-            if len(money) > 20:
-                money = '*'
-
-        else:
+        start_index = re.search(".?補.?稅額", content).start()
+        money = content[start_index + 4 : content.index('元', start_index) + 1]
+        if len(money) > 20:
             money = '*'
+
     except:
         money = '*'
-    #print(money)
 
     # save csv file
     filepath = 'analysis_' + date + '/money_inquiry_' + date + '.csv'

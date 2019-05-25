@@ -7,7 +7,6 @@ import re
 def get_total_content(verdict, date, file_num):
 
     try:
-
         index = [m.start() for m in re.finditer('書記官', verdict)]
         verdict = verdict[:index[-1]]
         end_index = verdict.index('中華民國', len(verdict) - 1000)

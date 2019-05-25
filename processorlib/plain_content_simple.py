@@ -2,24 +2,34 @@
 # coding: utf-8
 import os
 import csv
+import re
 
 def get_plain_content_simple(verdict, date, file_num):
 
     try:
         content = ''
-        if verdict.find('\n壹、') != -1 and verdict.find('壹、程序部分') == -1:
-            content_line = verdict.replace('\n貳、', '@').replace('\n參、', '@').replace('\n肆、', '@').split('@')
+
+        if (re.search("\s壹、(?!程序)", verdict) != None):
+            content_line = re.split('壹、|貳、|參、|肆、|伍、' ,verdict)
         else:
-            content_line = verdict.replace('\n二、', '@').replace('\n三、', '@').replace('\n四、', '@').split('@')
+            content_line = re.split('一、|二、|三、|四、|五、' ,verdict)
         for line in content_line:
-            if line[:5].find('原告') != -1 and len(line) > 100:
+            if (int(file_num) == 42):
+                print(line)
+            if (re.search("(?:上訴人|原告).{0,4}(?:主張|意旨)\S*(?:︰|：)", line) != None):
                 content = line
                 content_num = len(content)
+        '''
+        start_index = re.search("(?:上訴人|原告).{0,4}(?:主張|意旨).*", verdict).start()
+        start_content = verdict[verdict[start_index:].index('\n') + start_index:]
+        end_index = re.search("聲\s{0,5}明[\s\S]*。", start_content).start() + start_index
+        content = verdict[start_index: end_index]
+        content_num = len(content)
+        '''
 
         if content == '':
             content = '*'
             content_num = -1
-
     except:
         content_num = '*'
 

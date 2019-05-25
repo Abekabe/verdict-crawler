@@ -3,6 +3,7 @@
 import os
 import csv
 import re
+
 def get_result_content(verdict, date, file_num):
 
     try:
@@ -12,16 +13,19 @@ def get_result_content(verdict, date, file_num):
         end_index = verdict.index('中華民國', len(verdict) - 1000)
         verdict = verdict[:end_index]
         if verdict.find('\n壹、') != -1 and verdict.find('壹、程序部分') == -1:
-            content_line = verdict.replace('\n貳、', '@').replace('\n參、', '@').replace('\n肆、', '@').replace('\n伍、', '@').split('@')
+            line = re.split('壹、|貳、|參、|肆、|伍、' ,verdict)
         else:
-            line = verdict.replace('\n二、', '@').replace('\n三、', '@').replace('\n四、', '@').replace('\n五、', '@').split('@')
-
+            line = re.split('一、|二、|三、|四、|五、' ,verdict)
         for num in range(len(line)):
-            if (line[num][:5].find('被告') != -1 or line[num].find('被上訴') == 0) and len(line[num]) > 100:
-                content = line[num+1]
-                content_num = len(content)
+            if (line[num][:5].find('被告') != -1 or line[num].find('被上訴') == 0) and len(line[num]) > 20:
                 break
-
+        if (num == len(line)-1):
+            for num in range(len(line)):
+                if (line[num][:5].find('原告') != -1 or line[num].find('上訴') == 0) and len(line[num]) > 20:
+                    break
+        content = ''.join(line[num+1:])
+        #print(content)
+        content_num = len(content)
         if content == '':
             content = '*'
             content_num = -1

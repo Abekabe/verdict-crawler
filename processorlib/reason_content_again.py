@@ -6,7 +6,7 @@ import csv
 def get_reason_content_again(verdict, date, file_num):
 
     try:
-        start_index = verdict.index('一、')
+        start_index = verdict.index('事實及理由')
         end_index = verdict.index('二、', start_index)
         content = verdict[start_index + 2 : end_index].replace('\n', '').replace('事實概要：', '').replace('事實概要', '')
         content_num = len(content)
@@ -15,8 +15,6 @@ def get_reason_content_again(verdict, date, file_num):
         content = '*'
         content_num = '*'
 
-
-    '''
     # save csv file
     filepath = 'analysis_' + date + '/reason_content_num_' + date + '.csv'
     if not os.path.isfile(filepath):
@@ -27,5 +25,5 @@ def get_reason_content_again(verdict, date, file_num):
     with open(filepath, 'a', encoding = 'big5', newline='\n') as csvfile:
                 writer = csv.writer(csvfile)
                 writer.writerow([file_num,content_num])
-    '''
+
     return content, content_num

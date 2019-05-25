@@ -8,7 +8,7 @@ def get_debate_end_simple(verdict, date, file_num):
     try:
         set_line = verdict[:verdict.index('上列當事人')]
         end_index = set_line.index('辯論終結')
-        end_date = set_line[set_line.index('號', end_index - 20) + 2 : end_index]
+        end_date = set_line[set_line.index('號', end_index - 20) + 2 : end_index].replace('民國', '')
         year = end_date[:end_date.index('年')]
         mouth = end_date[end_date.index('年') + 1 : end_date.index('月')]
         day = end_date[end_date.index('月') + 1 : end_date.index('日')]

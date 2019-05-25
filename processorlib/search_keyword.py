@@ -27,7 +27,7 @@ def search_keyword(content, keyword, date, file_num, filename, special):
         ans_head = ['3', '4', '5', '7', '9', '10', '11', '14', '16', '18', '21', '23']
         ans_list = ['0'] * len(ans_head)
         for item in find_list:
-            m = re.match('納.*保.*法第(.*)條第([^、]*)項', item)
+            m = re.match('納.*保.*法第(.*)條第{1,2}([\d、]*)項', item)
             second = getResultForDigit(m.group(2))
             if (is_number(m.group(1))):
                 first = m.group(1)

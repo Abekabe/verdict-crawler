@@ -2,12 +2,15 @@
 # coding: utf-8
 import os
 import csv
+import re
 
 def get_verdict_date(verdict, date, file_num):
 
     try:
         verdict = verdict.replace('\n', '')
-        end_index = verdict.index('中華民國', len(verdict) - 1000)
+        index = [m.start() for m in re.finditer('書記官', verdict)]
+        verdict = verdict[:index[-1]]
+        end_index = verdict.index('中華民國', len(verdict) - 100)
         verdict_date = verdict[end_index + 4: verdict.index('日', end_index) + 1]
         year = verdict_date[:verdict_date.index('年')]
         mouth = verdict_date[verdict_date.index('年') + 1 : verdict_date.index('月')]

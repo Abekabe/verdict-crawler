@@ -2,15 +2,15 @@
 # coding: utf-8
 import os
 import csv
+import re
 
 def get_reason_content_simple(verdict, date, file_num):
 
     try:
-        start_index = verdict.index('事實概要')
-        end_index = verdict.index('。', verdict.index('原告主張', start_index) - 10) + 1
-        content = verdict[start_index + 5 : end_index].replace('\n', '')
+        start_index = verdict.index('理由') + 5
+        end_index = re.search("(?:上訴人|原告).{0,4}主張", verdict).start() - 3
+        content = verdict[start_index: end_index].replace('\n', '')
         content_num = len(content)
-
     except:
         content = '*'
         content_num = '*'

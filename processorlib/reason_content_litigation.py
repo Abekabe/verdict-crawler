@@ -6,7 +6,7 @@ import csv
 def get_reason_content_litigation(verdict, date, file_num):
 
     try:
-        start_index = verdict.index('一、')
+        start_index = verdict.index('事實及理由')
         end_index = verdict.index('二、', start_index)
         content = verdict[start_index + 5 : end_index].replace('\n', '')
         content_num = len(content)
