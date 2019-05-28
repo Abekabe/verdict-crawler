@@ -6,6 +6,7 @@ import csv
 def get_unsatisfied_date(verdict, date, file_num):
 
     try:
+        verdict = verdict.replace('\n', '')
         start_index = verdict.index('中華民國') + 4
         unsatisfied_date = verdict[start_index : verdict.index('日', start_index) + 1].replace('\n', '')
         year = unsatisfied_date[:unsatisfied_date.index('年')]

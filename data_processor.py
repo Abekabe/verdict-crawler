@@ -58,16 +58,14 @@ if __name__ == '__main__':
 
         for f_num in range(int(total)):
             file = open('data_' + date + '/' + str(f_num + 1) + '.txt', 'r', encoding = 'utf8')
-            verdict = file.read().replace('　', '').replace(' ', '').replace('再審', '')
+            content_verdict = file.read().replace('　', '').replace('再審', '')
+            verdict = content_verdict.replace(' ', '')
             #.replace('\ue4fd', ' ').replace('\ue3f1', '').replace('\u6052', '?').replace('\ue481', '?').replace('\ue4da', '?').replace('\u5afa', '?')
             end_date = ['', '', '']
             type_line = verdict[:100].replace('再審', '')
 
             if type_line.find('訴字') != -1 or type_line.find('訴更') != -1:
                 end_date = get_debate_end_simple(verdict, date, f_num + 1)
-                reason_content, reason_content_num = get_reason_content_simple(verdict, date, f_num + 1)
-                plain_content, plain_content_num = get_plain_content_simple(verdict, date, f_num + 1)
-                defend_content, defend_content_num = get_defend_content_simple(verdict, date, f_num + 1)
                 plaintiff = get_plaintiff_simple(verdict, date, f_num + 1)
                 plain_represent = get_plain_represent_simple(verdict, date, f_num + 1)
                 plain_attorney = get_plain_attorney_simple(verdict, date, f_num + 1)
@@ -76,10 +74,6 @@ if __name__ == '__main__':
                 defend_attorney = get_defend_attorney_simple(verdict, date, f_num + 1)
 
             elif type_line.find('再字') != -1:
-                reason_content, reason_content_num = get_reason_content_simple(verdict, date, f_num + 1)
-                #plain_content = get_plain_content_again(verdict, date, f_num + 1)
-                plain_content, plain_content_num = get_plain_content_simple(verdict, date, f_num + 1)
-                defend_content, defend_content_num = get_defend_content_simple(verdict, date, f_num + 1)
                 plaintiff = get_plaintiff_simple(verdict, date, f_num + 1)
                 plain_represent = get_plain_represent_simple(verdict, date, f_num + 1)
                 plain_attorney = get_plain_attorney_simple(verdict, date, f_num + 1)
@@ -88,9 +82,6 @@ if __name__ == '__main__':
                 defend_attorney = get_defend_attorney_simple(verdict, date, f_num + 1)
 
             elif type_line.find('簡上') != -1:
-                reason_content, reason_content_num = get_reason_content_simple(verdict, date, f_num + 1)
-                plain_content, plain_content_num = get_plain_content_simple(verdict, date, f_num + 1)
-                defend_content, defend_content_num = get_defend_content_simple(verdict, date, f_num + 1)
                 plaintiff = get_plaintiff_litigation(verdict, date, f_num + 1)
                 plain_represent = get_plain_represent_litigation(verdict, date, f_num + 1)
                 plain_attorney = get_plain_attorney_litigation(verdict, date, f_num + 1)
@@ -98,8 +89,10 @@ if __name__ == '__main__':
                 defend_represent = get_defend_represent_litigation(verdict, date, f_num + 1)
                 defend_attorne = get_defend_attorney_litigation(verdict, date, f_num + 1)
 
-
-            result_content, result_content_num = get_result_content(verdict, date, f_num + 1)
+            reason_content, reason_content_num = get_reason_content_simple(verdict, date, f_num + 1)
+            plain_content, plain_content_num = get_plain_content_simple(content_verdict, date, f_num + 1)
+            defend_content, defend_content_num = get_defend_content_simple(content_verdict, date, f_num + 1)
+            result_content, result_content_num = get_result_content(content_verdict, date, f_num + 1)
             total_content_num = get_total_content(verdict, date, f_num + 1)
             plain_search_1 = search_keyword(plain_content, '納.*保.*法第.*條第.*項、?', date, f_num + 1, 'plain_content_納稅者權利保護法', 1)
             defend_search_1 = search_keyword(defend_content, '納.*保.*法第.*條第.*項、?', date, f_num + 1, 'defend_content_納稅者權利保護法', 1)

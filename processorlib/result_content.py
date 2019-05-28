@@ -10,21 +10,27 @@ def get_result_content(verdict, date, file_num):
         content = ''
         index = [m.start() for m in re.finditer('書記官', verdict)]
         verdict = verdict[:index[-1]]
-        end_index = verdict.index('中華民國', len(verdict) - 1000)
+        end_index = verdict.index('高等行政法院', len(verdict) - 3000)
         verdict = verdict[:end_index]
-        if verdict.find('\n壹、') != -1 and verdict.find('壹、程序部分') == -1:
-            line = re.split('壹、|貳、|參、|肆、|伍、' ,verdict)
+        title = re.search("^\S、\S*(?:上訴|原告).{0,6}(?:主張|意旨)\S*(?:︰|：)", verdict, re.M).group(0)
+        number_list = ['一', '二' ,'三', '四', '五', '六', '七']
+        if any(num in title for num in number_list):
+            content_line = re.split('\n一、|\n二、|\n三、|\n四、|\n五、|\n六、|\n七、|\n壹、|\n貳、|\n參、|\n肆、|\n伍、' ,verdict)
         else:
-            line = re.split('一、|二、|三、|四、|五、' ,verdict)
-        for num in range(len(line)):
-            if (line[num][:5].find('被告') != -1 or line[num].find('被上訴') == 0) and len(line[num]) > 20:
-                break
-        if (num == len(line)-1):
-            for num in range(len(line)):
-                if (line[num][:5].find('原告') != -1 or line[num].find('上訴') == 0) and len(line[num]) > 20:
-                    break
-        content = ''.join(line[num+1:])
-        #print(content)
+            content_line = re.split('\n壹、|\n貳、|\n參、|\n肆、|\n伍、|\n陸、|\n柒、' ,verdict, re.M)
+        plain_index, defend_index = 0, 0
+        for num in range(len(content_line)):
+            if (re.search("^\S*(?:上訴|原告).{0,6}(?:主張|意旨)\S*(?:︰|：)", content_line[num], re.M) != None):
+                plain_index = num
+                break;
+
+        for num in range(len(content_line)):
+            if (re.search("^\S*(?:被上訴|被告).{0,6}(?:略以|則以|主張|抗辯|答辯|辯以)\S*(?:︰|：)", content_line[num], re.M) != None):
+                defend_index = num
+                break;
+
+
+        content = ''.join(content_line[max(plain_index, defend_index) + 1:]).replace(' ', '')
         content_num = len(content)
         if content == '':
             content = '*'

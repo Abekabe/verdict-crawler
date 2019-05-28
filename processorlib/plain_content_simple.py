@@ -8,24 +8,20 @@ def get_plain_content_simple(verdict, date, file_num):
 
     try:
         content = ''
-
-        if (re.search("\s壹、(?!程序)", verdict) != None):
-            content_line = re.split('壹、|貳、|參、|肆、|伍、' ,verdict)
+        title = re.search("^\S、\S*(?:上訴|原告).{0,6}(?:主張|意旨)\S*(?:︰|：)", verdict, re.M).group(0)
+        number_list = ['一', '二' ,'三', '四', '五']
+        if any(num in title for num in number_list):
+            content_line = re.split('\n一、|\n二、|\n三、|\n四、|\n五、' ,verdict)
         else:
-            content_line = re.split('一、|二、|三、|四、|五、' ,verdict)
+            content_line = re.split('\n壹、|\n貳、|\n參、|\n肆、|\n伍、' ,verdict)
+
         for line in content_line:
-            if (int(file_num) == 42):
-                print(line)
-            if (re.search("(?:上訴人|原告).{0,4}(?:主張|意旨)\S*(?:︰|：)", line) != None):
-                content = line
+            search_result = re.search("^\S*(?:上訴|原告).{0,6}(?:主張|意旨)\S*(?:︰|：)", line, re.M)
+            if (search_result != None):
+                content = line.replace(' ', '')
                 content_num = len(content)
-        '''
-        start_index = re.search("(?:上訴人|原告).{0,4}(?:主張|意旨).*", verdict).start()
-        start_content = verdict[verdict[start_index:].index('\n') + start_index:]
-        end_index = re.search("聲\s{0,5}明[\s\S]*。", start_content).start() + start_index
-        content = verdict[start_index: end_index]
-        content_num = len(content)
-        '''
+                break;
+
 
         if content == '':
             content = '*'

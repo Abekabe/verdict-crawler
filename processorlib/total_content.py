@@ -12,7 +12,6 @@ def get_total_content(verdict, date, file_num):
         end_index = verdict.index('中華民國', len(verdict) - 1000)
         verdict = verdict[verdict.index('理由'):end_index]
         content_num = len(verdict)
-
     except:
         content_num = '*'
 

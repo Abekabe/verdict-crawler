@@ -8,7 +8,7 @@ def get_reason_content_simple(verdict, date, file_num):
 
     try:
         start_index = verdict.index('理由') + 5
-        end_index = re.search("(?:上訴人|原告).{0,4}主張", verdict).start() - 3
+        end_index = re.search("^\S、\S*(?:上訴|原告).{0,15}(?:主張|意旨)\S*(?:︰|：)", verdict, re.M).start() - 3
         content = verdict[start_index: end_index].replace('\n', '')
         content_num = len(content)
     except:
