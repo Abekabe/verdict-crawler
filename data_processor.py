@@ -87,7 +87,7 @@ if __name__ == '__main__':
                 plain_attorney = get_plain_attorney_litigation(verdict, date, f_num + 1)
                 defendant = get_defendant_litigation(verdict, date, f_num + 1)
                 defend_represent = get_defend_represent_litigation(verdict, date, f_num + 1)
-                defend_attorne = get_defend_attorney_litigation(verdict, date, f_num + 1)
+                defend_attorney = get_defend_attorney_litigation(verdict, date, f_num + 1)
 
             reason_content, reason_content_num = get_reason_content_simple(verdict, date, f_num + 1)
             plain_content, plain_content_num = get_plain_content_simple(content_verdict, date, f_num + 1)
