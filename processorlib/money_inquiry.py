@@ -2,21 +2,25 @@
 # coding: utf-8
 import os
 import csv
+import re
 
 def get_money_inquiry(content, date, file_num):
 
     try:
         money = '*'
         content = content.replace('\n', '')
-        start_index = [m for m in re.finditer('(?:所漏|補徵|應[納補退])稅額(?:([\d,]*)元、)*([(\d),]*)元', verdict)]
-
-        money = content[start_index + 4 : content.index('元', start_index) + 1]
-        if len(money) > 20:
+        money_list = []
+        money_content = re.findall('(?:所漏|補徵|應[納補退])稅額(?:[0-9,]*元、)*[0-9,]*元', content)
+        for c in money_content:
+            money_list.extend([m.group(1) for m in re.finditer('([0-9,]*)元', c)])
+        money = '、'.join(money_list)
+        if money == '':
             money = '*'
 
     except:
         money = '*'
 
+    money_list.insert(0, file_num)
     # save csv file
     filepath = 'analysis_' + date + '/money_inquiry_' + date + '.csv'
     if not os.path.isfile(filepath):
@@ -26,6 +30,6 @@ def get_money_inquiry(content, date, file_num):
 
     with open(filepath, 'a', encoding = 'big5', newline='\n') as csvfile:
                 writer = csv.writer(csvfile)
-                writer.writerow([file_num,money])
+                writer.writerow( money_list)
 
     return money

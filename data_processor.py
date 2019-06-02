@@ -31,6 +31,7 @@ from processorlib.result_content import get_result_content
 from processorlib.search_keyword import search_keyword
 from processorlib.search_keyword_num import search_keyword_num
 from processorlib.money_inquiry import get_money_inquiry
+from processorlib.penalty_inquiry import get_penalty_inquiry
 from processorlib.plain_content_simple import get_plain_content_simple
 from processorlib.plain_content_litigation import get_plain_content_litigation
 from processorlib.defend_content_simple import get_defend_content_simple
@@ -38,6 +39,7 @@ from processorlib.defend_content_litigation import get_defend_content_litigation
 from processorlib.special_result import get_special_result
 from processorlib.total_content import get_total_content
 from processorlib.issue_content import get_issue_content
+from processorlib.special_keyword import search_special_keyword
 
 start = input("start(yyymmdd): ")
 end = input("end(yyymmdd): ")
@@ -55,7 +57,7 @@ if __name__ == '__main__':
 
     with open('value_' + date + '.csv', 'w', encoding = 'big5', newline='\n') as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(['案件編號', '案件類型', '辯論終結年', '辯論終結月', '辯論終結日', '原告', '原告代表人', '原告訴訟代理人', '被告', '被告代表人', '被告訴訟代理人', '不服訴願年', '不服訴願月', '不服訴願日', '撤銷', '駁回', '廢棄', '訴訟費用', '判決年', '判決月', '判決日', '第幾庭', '審判長及法官', '事實字數', '原告字數', '被告字數', '爭點字數', '判斷字數', '總字數', '原告搜尋納保法', '被告搜尋納保法', '判斷搜尋納保法', '原告搜尋稅捐稽徵法', '被告搜尋稅捐稽徵法', '判斷搜尋稅捐稽徵法', '罰鍰次數','補徵稅額', '判決主文'])
+        writer.writerow(['案件編號', '案件類型', '辯論終結年', '辯論終結月', '辯論終結日', '原告', '原告代表人', '原告訴訟代理人', '被告', '被告代表人', '被告訴訟代理人', '不服訴願年', '不服訴願月', '不服訴願日', '撤銷', '駁回', '廢棄', '訴訟費用', '判決年', '判決月', '判決日', '第幾庭', '審判長及法官', '事實字數', '原告字數', '被告字數', '爭點字數', '判斷字數', '總字數', '原告搜尋納保法', '被告搜尋納保法', '判斷搜尋納保法', '原告搜尋稅捐稽徵法', '被告搜尋稅捐稽徵法', '判斷搜尋稅捐稽徵法', '判斷搜尋會計事項', '判斷搜尋營利事業所得稅', '原告搜尋會計事項', '原告搜尋營利事業所得稅', '被告搜尋會計事項', '被告搜尋營利事業所得稅', '判斷搜尋會計事項', '判斷搜尋營利事業所得稅', '罰鍰次數','補徵稅額金額', '罰鍰金額', '判決主文'])
 
         for f_num in range(int(total)):
             file = open('data_' + date + '/' + str(f_num + 1) + '.txt', 'r', encoding = 'utf8')
@@ -108,9 +110,11 @@ if __name__ == '__main__':
             plain_search_2 = search_keyword(plain_content, '稅捐稽徵法第(?:[11十一]{2}條?之[3-7三四五六七]{1}條?|[12十二]{2}條?之[1一]{1}條?)', date, f_num + 1, 'plain_content_稅捐稽徵法', 2)
             defend_search_2 = search_keyword(defend_content, '稅捐稽徵法第(?:[11十一]{2}條?之[3-7三四五六七]{1}條?|[12十二]{2}條?之[1一]{1}條?)', date, f_num + 1, 'defend_content_稅捐稽徵法', 2)
             result_search_2 = search_keyword(result_content, '稅捐稽徵法第(?:[11十一]{2}條?之[3-7三四五六七]{1}條?|[12十二]{2}條?之[1一]{1}條?)', date, f_num + 1, 'result_content_稅捐稽徵法', 2)
-
             reason_search = search_keyword_num(reason_content, '罰鍰', date, f_num + 1, 'reason_content_罰鍰')
-
+            plain_special_exist = search_special_keyword(verdict, date, f_num + 1, 'plain_content_')
+            defend_special_exist = search_special_keyword(verdict, date, f_num + 1, 'defend_content_')
+            result_special_exist = search_special_keyword(verdict, date, f_num + 1, 'result_content_')
+            reason_special_exist = search_special_keyword(verdict, date, f_num + 1, 'reason_content_')
 
             #special_result =  get_special_result(verdict, date, f_num + 1)
             unsatisfied_date =  get_unsatisfied_date(verdict, date, f_num + 1)
@@ -120,8 +124,8 @@ if __name__ == '__main__':
             court_num = get_court_num(verdict, date, f_num + 1)
             judge = get_judge(verdict, date, f_num + 1)
             money_inquiry = get_money_inquiry(reason_content, date, f_num + 1)
-
-            output = [f_num + 1, verdict_type, end_date[0], end_date[1], end_date[2], plaintiff, plain_represent, plain_attorney, defendant, defend_represent, defend_attorney, unsatisfied_date[0], unsatisfied_date[1], unsatisfied_date[2], result[0], result[1], result[2], result[3], judgment_date[0], judgment_date[1], judgment_date[2] ,court_num, judge, reason_content_num, plain_content_num, defend_content_num, issue_content_num, result_content_num, total_content_num, plain_search_1, defend_search_1, result_search_1, plain_search_2, defend_search_2, result_search_2, reason_search, money_inquiry, maintext]
+            penalty_inquiry = get_penalty_inquiry(reason_content, date, f_num + 1)
+            output = [f_num + 1, verdict_type, end_date[0], end_date[1], end_date[2], plaintiff, plain_represent, plain_attorney, defendant, defend_represent, defend_attorney, unsatisfied_date[0], unsatisfied_date[1], unsatisfied_date[2], result[0], result[1], result[2], result[3], judgment_date[0], judgment_date[1], judgment_date[2] ,court_num, judge, reason_content_num, plain_content_num, defend_content_num, issue_content_num, result_content_num, total_content_num, plain_search_1, defend_search_1, result_search_1, plain_search_2, defend_search_2, result_search_2,  plain_special_exist[0], plain_special_exist[1], defend_special_exist[0], defend_special_exist[1], result_special_exist[0], result_special_exist[1], reason_special_exist[0], reason_special_exist[1], reason_search, money_inquiry, penalty_inquiry, maintext]
             writer.writerow(output)
 
     input('Success!! Please press any key to continue...')
