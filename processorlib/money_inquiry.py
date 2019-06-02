@@ -8,7 +8,8 @@ def get_money_inquiry(content, date, file_num):
     try:
         money = '*'
         content = content.replace('\n', '')
-        start_index = re.search(".?補.?稅額", content).start()
+        start_index = [m for m in re.finditer('(?:所漏|補徵|應[納補退])稅額(?:([\d,]*)元、)*([(\d),]*)元', verdict)]
+
         money = content[start_index + 4 : content.index('元', start_index) + 1]
         if len(money) > 20:
             money = '*'

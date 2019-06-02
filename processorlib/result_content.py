@@ -4,7 +4,7 @@ import os
 import csv
 import re
 
-def get_result_content(verdict, date, file_num):
+def get_result_content(verdict, date, file_num, issue_end):
 
     try:
         content = ''
@@ -29,9 +29,9 @@ def get_result_content(verdict, date, file_num):
                 defend_index = num
                 break;
 
-
-        content = ''.join(content_line[max(plain_index, defend_index) + 1:]).replace(' ', '')
+        content =  content_line[max(plain_index, defend_index) + 1][issue_end:] + ''.join(content_line[min(max(plain_index, defend_index) + 2, len(content_line) - 1):]).replace(' ', '')
         content_num = len(content)
+
         if content == '':
             content = '*'
             content_num = -1

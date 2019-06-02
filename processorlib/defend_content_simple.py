@@ -20,13 +20,6 @@ def get_defend_content_simple(verdict, date, file_num):
                 content = line.replace(' ', '')
                 content_num = len(content)
                 break;
-        '''
-        if (file_num == 209):
-            print()
-            print(content)
-            print(title)
-            print()
-        '''
 
         if content == '':
             content = '*'
