@@ -55,7 +55,7 @@ def search_keyword(content, keyword, date, file_num, filename, special):
             ans_head = ['3', '4', '5', '7', '1']
             ans_list = ['0'] * len(ans_head)
             for item in find_list:
-                m = re.match('稅捐稽徵法第([12十一二]{2})條?之([1-7一三四五六七]{1})條?', item)
+                m = re.match('稅捐稽徵法第([12十一二]{2})條?[之-]([1-7一三四五六七]{1})條?', item)
                 if (is_number(m.group(1))):
                     first = m.group(1)
                 else:
