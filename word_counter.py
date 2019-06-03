@@ -9,7 +9,6 @@ if __name__ == '__main__':
             content = ''
             for line in iter(input, stopword):
                 content += line
-            print(content)
             print("Content length: " + str(len(content.replace('\n', '').replace(' ', ''))))
     except KeyboardInterrupt:
         print()
